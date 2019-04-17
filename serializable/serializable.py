@@ -4,7 +4,7 @@ import inspect
 class Serializable(object):
 
     def __initialize(self, locals_):
-        if getattr(self, "_Serializable__initialized", False):
+        if getattr(self, "__initialized", False):
             return
 
         signature = inspect.signature(self.__init__)
@@ -64,9 +64,9 @@ class Serializable(object):
         self.__initialized = True
 
     def __getstate__(self):
-        assert getattr(self, '_Serializable__initialized', False), (
+        assert getattr(self, '__initialized', False), (
             "Cannot get state from uninitialized Serializable. Forgot to call"
-            " `self._Serializable__initialize` in your __init__ method?")
+            " `self.__initialize` in your __init__ method?")
 
         state = {
             '__args': self.__args,
@@ -84,9 +84,9 @@ class Serializable(object):
         assert isinstance(instance, Serializable), (
             "Can only clone Serializable objects. Got: {}"
             "".format(type(instance)))
-        assert getattr(instance, '_Serializable__initialized', False), (
+        assert getattr(instance, '__initialized', False), (
             "Cannot clone an uninitialized Serializable. Forgot to call"
-            " `self._Serializable__initialize` in your __init__ method?")
+            " `self.__initialize` in your __init__ method?")
 
         state = instance.__getstate__()
 
